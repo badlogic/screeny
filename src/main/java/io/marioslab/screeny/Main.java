@@ -17,7 +17,7 @@ public class Main {
 	private static HotkeyDetector detector;
 	private static Tray tray;
 
-	public static void main (String[] args) throws InterruptedException, IOException {
+	public static void main (String[] args) throws Throwable {
 		Utils.writeToFile(LOG_FILE, "", false);
 		detector = new HotkeyDetector();
 		tray = new Tray();

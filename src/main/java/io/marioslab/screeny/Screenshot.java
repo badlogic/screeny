@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Screenshot {
 	static Robot robot;
@@ -107,6 +108,7 @@ public class Screenshot {
 			});
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			setTitle("Screeny");
 			setSize(screenSize);
 			setUndecorated(true);
 			setBackground(new Color(0, 0, 0, 0));
@@ -149,21 +151,21 @@ public class Screenshot {
 					super.paintComponent(g);
 					Graphics2D g2 = (Graphics2D)g.create();
 
-					Area area = new Area(new Rectangle(0, 0, getWidth(), getHeight()));
+					// Area area = new Area(new Rectangle(0, 0, getWidth(), getHeight()));
 					if (!(sx == -1 || sy == -1 || ex == -1 || ey == -1)) {
 						int x = Math.min(sx, ex);
 						int y = Math.min(sy, ey);
 						int w = Math.abs(ex - sx);
 						int h = Math.abs(ey - sy);
-						area.subtract(new Area(new Rectangle(x - 1, y - 1, w + 2, h + 2)));
+// area.subtract(new Area(new Rectangle(x - 1, y - 1, w + 2, h + 2)));
 						g2.setColor(new Color(0.7f, 0, 0));
 						g2.drawRect(x, y, w, h);
 					}
 
-					g2.setComposite(AlphaComposite.Src.derive(.25f));
-					g2.setPaint(new Color(0, 0, 0));
-					g2.fill(area);
-					g2.setComposite(AlphaComposite.Src.derive(1f));
+// g2.setComposite(AlphaComposite.Src.derive(.25f));
+// g2.setPaint(new Color(0, 0, 0));
+// g2.fill(area);
+// g2.setComposite(AlphaComposite.Src.derive(1f));
 
 					g2.setPaint(Color.RED);
 					g2.drawString("Press Escape to cancel", 10, 20);
@@ -173,13 +175,18 @@ public class Screenshot {
 
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.setType(Window.Type.UTILITY);
-			this.setAlwaysOnTop(true);
 		}
 
 		Rectangle start () {
 			disposed = false;
 			sx = sy = ex = ey = -1;
-			setVisible(true);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run () {
+					SelectionFrame.this.setVisible(true);
+					SelectionFrame.this.setAlwaysOnTop(true);
+				}
+			});
 			while (!disposed) {
 				try {
 					Thread.sleep(20);
