@@ -9,16 +9,22 @@ import java.io.PrintWriter;
 import io.marioslab.screeny.Config.Hotkey;
 import io.marioslab.screeny.HotkeyDetector.HotkeyAction;
 import io.marioslab.screeny.HotkeyDetector.HotkeyCallback;
+import io.marioslab.screeny.platform.PlatformAWT;
+import io.marioslab.screeny.platform.PlatformMac;
 
 public class Main {
 	public static final File LOG_FILE = new File(System.getProperty("user.home") + "/.screeny.log");
 
 	private static Config config;
+	private static Platform platform;
 	private static HotkeyDetector detector;
 	private static Tray tray;
 
 	public static void main (String[] args) throws Throwable {
+		System.setProperty("apple.awt.UIElement", "true");
+
 		Utils.writeToFile(LOG_FILE, "", false);
+		platform = newPlatform();
 		detector = new HotkeyDetector();
 		tray = new Tray();
 		loadConfig();
@@ -39,6 +45,15 @@ public class Main {
 
 	public static HotkeyDetector getKeyDetector () {
 		return detector;
+	}
+
+	public static Platform getPlatform () {
+		return platform;
+	}
+
+	private static Platform newPlatform () {
+		if (System.getProperty("os.name").toLowerCase().contains("mac")) return new PlatformMac();
+		return new PlatformAWT();
 	}
 
 	private static void loadConfig () {

@@ -3,7 +3,7 @@
 # ALT, CTRL, SHIFT, META (CMD on macOS, Windows key on Windows) for special keys
 # a-z for letter keys
 # 0-9 for number keys 
-screenshot = META SHIFT 4
+screenshot = META 2
 app_screenshot = META ALT SHIFT 4
 region_screenshot = META 4
 
