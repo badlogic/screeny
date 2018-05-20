@@ -1,0 +1,17 @@
+# Specify the hotkeys to be used to trigger actions
+# Separate multiple keys with a space
+# ALT, CTRL, SHIFT, META (CMD on macOS, Windows key on Windows) for special keys
+# a-z for letter keys
+# 0-9 for number keys 
+screenshot = META SHIFT 4
+app_screenshot = META ALT SHIFT 4
+region_screenshot = META 4
+
+# The local directory to save files to, defaults to Desktop/
+local_directory = 
+
+# Specify SSH configuration to upload to your server
+ssh_host = marioslab.io
+ssh_port = 22
+ssh_remote_directory = /home/badlogic/libgdx.badlogicgames.com/uploads
+ssh_url = http://libgdx.badlogicgames.com/uploads/
