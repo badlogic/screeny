@@ -25,7 +25,6 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class Screenshot {
 	static Robot robot;
@@ -157,9 +156,11 @@ public class Screenshot {
 						int w = Math.abs(ex - sx);
 						int h = Math.abs(ey - sy);
 						area.subtract(new Area(new Rectangle(x - 1, y - 1, w + 2, h + 2)));
+						g2.setColor(new Color(0.7f, 0, 0));
+						g2.drawRect(x, y, w, h);
 					}
 
-					g2.setComposite(AlphaComposite.Src.derive(.1f));
+					g2.setComposite(AlphaComposite.Src.derive(.25f));
 					g2.setPaint(new Color(0, 0, 0));
 					g2.fill(area);
 					g2.setComposite(AlphaComposite.Src.derive(1f));
