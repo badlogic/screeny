@@ -76,7 +76,6 @@ public class Main {
 				while (true) {
 					if (!Config.CONFIG_FILE.exists() || Config.CONFIG_FILE.lastModified() != lastModificationTime) {
 						lastModificationTime = Config.CONFIG_FILE.lastModified();
-						log("Reloading configuration");
 
 						synchronized (Main.class) {
 							Main.config = new Config();

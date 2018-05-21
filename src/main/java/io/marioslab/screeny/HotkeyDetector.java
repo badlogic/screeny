@@ -37,7 +37,6 @@ public class HotkeyDetector {
 				synchronized (this) {
 					for (HotkeyAction action : actions) {
 						if (action.matches(pressedKeys)) {
-							Main.log("Triggered action " + action.action);
 							action.callback.hotkey(action.action, action.hotkey);
 							break;
 						}

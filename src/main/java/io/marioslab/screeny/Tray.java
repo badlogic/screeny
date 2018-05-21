@@ -2,7 +2,6 @@
 package io.marioslab.screeny;
 
 import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -65,7 +64,7 @@ public class Tray {
 			});
 
 			trayIcon.setPopupMenu(menu);
-			Main.log("Setup tray icon.");
+			Main.log("Setup tray.");
 		}
 	}
 }
