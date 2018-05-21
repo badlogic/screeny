@@ -23,17 +23,32 @@ import com.jcraft.jsch.Session;
 import io.marioslab.screeny.Config.SshStorageConfig;
 import io.marioslab.screeny.Main;
 import io.marioslab.screeny.Storage;
+import io.marioslab.screeny.ui.UI;
 
 public class SshStorage implements Storage {
 	@Override
 	public String save (BufferedImage image, String fileName) {
 		for (SshStorageConfig config : Main.getConfig().getEnabledStorageConfigs(SshStorageConfig.class)) {
-			if (config.user == null || config.user.isEmpty()) Main.logError("No SSH user specified in configuration", null);
-			if (config.host == null || config.host.isEmpty()) Main.logError("No SSH host specified in configuration", null);
-			if (config.port == 0) Main.logError("No SSH port specified in configuration", null);
-			if (config.remoteDirectory == null || config.remoteDirectory.isEmpty())
+			if (config.user == null || config.user.isEmpty()) {
+				Main.logError("No SSH user specified in configuration", null);
+				return null;
+			}
+			if (config.host == null || config.host.isEmpty()) {
+				Main.logError("No SSH host specified in configuration", null);
+				return null;
+			}
+			if (config.port == 0) {
+				Main.logError("No SSH port specified in configuration", null);
+				return null;
+			}
+			if (config.remoteDirectory == null || config.remoteDirectory.isEmpty()) {
 				Main.logError("No SSH remote directory specified in configuration", null);
-			if (config.url == null || config.url.isEmpty()) Main.logError("No SSH URL specified in configuration", null);
+				return null;
+			}
+			if (config.url == null || config.url.isEmpty()) {
+				Main.logError("No SSH URL specified in configuration", null);
+				return null;
+			}
 
 			Session session = null;
 			Channel channel = null;
@@ -101,6 +116,7 @@ public class SshStorage implements Storage {
 				clipboard.setContents(selection, selection);
 
 				Main.log("Stored screenshot to remote file " + url);
+				UI.showNotification("Upload complete", "Stored image to " + url);
 				return url;
 			} catch (Throwable e) {
 				if (channel != null) channel.disconnect();

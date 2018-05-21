@@ -86,6 +86,8 @@ public class Main {
 						detector.addHotkeyAction(Main.config.screenshotHotkey, () -> Screenshot.takeScreenshot());
 						detector.addHotkeyAction(Main.config.appScreenshotHotkey, () -> Screenshot.takeAppScreenshot());
 						detector.addHotkeyAction(Main.config.regionScreenshotHotkey, () -> Screenshot.takeRegionScreenshot());
+
+						log("Reloaded configuration.");
 					}
 
 					try {
@@ -122,6 +124,8 @@ public class Main {
 				System.out.println(exception.getMessage());
 				exception.printStackTrace();
 			}
+
+			UI.showNotification("Error", message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

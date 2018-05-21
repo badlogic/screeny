@@ -36,7 +36,7 @@ public class Tray {
 			menu.add(close);
 
 			openSettings.addActionListener( (event) -> {
-				UI.show();
+				UI.showMain();
 			});
 
 			openLog.addActionListener( (event) -> {
