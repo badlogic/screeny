@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.marioslab.screeny.Config.Hotkey;
 import io.marioslab.screeny.HotkeyDetector.HotkeyAction;
 import io.marioslab.screeny.HotkeyDetector.HotkeyCallback;
 import io.marioslab.screeny.platform.PlatformAWT;
 import io.marioslab.screeny.platform.PlatformMac;
+import io.marioslab.screeny.storage.LocalStorage;
+import io.marioslab.screeny.storage.SshStorage;
 
 public class Main {
 	public static final File LOG_FILE = new File(System.getProperty("user.home") + "/.screeny.log");
@@ -19,6 +23,7 @@ public class Main {
 	private static Platform platform;
 	private static HotkeyDetector detector;
 	private static Tray tray;
+	private static List<Storage> storages = new ArrayList<Storage>();
 
 	public static void main (String[] args) throws Throwable {
 		System.setProperty("apple.awt.UIElement", "true");
@@ -27,10 +32,16 @@ public class Main {
 		platform = newPlatform();
 		detector = new HotkeyDetector();
 		tray = new Tray();
+		storages.add(new LocalStorage());
+		storages.add(new SshStorage());
 		loadConfig();
 
 		while (true)
 			Thread.sleep(1000);
+	}
+
+	public static List<Storage> getStorages () {
+		return storages;
 	}
 
 	public static Tray getTray () {

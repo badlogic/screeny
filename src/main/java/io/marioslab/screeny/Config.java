@@ -134,27 +134,44 @@ public class Config {
 	}
 
 	public static class LocalConfig {
-		public final File localDirectory;
+		public boolean enabled;
+		public File localDirectory;
 
 		public LocalConfig (Properties props) {
-			localDirectory = new File(props.getProperty("localdir", System.getProperty("user.home") + "/Desktop"));
+			enabled = Boolean.parseBoolean(props.getProperty("local_enabled", "true"));
+			if (props.getProperty("local_directory") != null && !props.getProperty("local_directory").isEmpty())
+				localDirectory = new File(props.getProperty("local_directory"));
+			else
+				localDirectory = new File(System.getProperty("user.home") + "/Desktop");
 			if (!localDirectory.exists() && !localDirectory.mkdirs()) {
-				Main.failError("Couldn't create local directory to store images in.");
+				localDirectory = new File(System.getProperty("user.home") + "/Desktop");
+				Main.logError("Couldn't create local directory to store images in, defaulting to " + localDirectory.getAbsolutePath(), null);
 			}
 		}
 	}
 
 	public static class SshConfig {
+		public boolean enabled;
+		public final String user;
 		public final String host;
 		public final int port;
-		public final String password;
 		public final String remoteDirectory;
+		public final String url;
+		public String keyFile;
+		public final String keyFilePassphrase;
+		public final String password;
 
 		public SshConfig (Properties props) {
+			this.enabled = Boolean.parseBoolean(props.getProperty("ssh_enabled", "false"));
+			this.user = props.getProperty("ssh_user", null);
 			this.host = props.getProperty("ssh_host", null);
 			this.port = Integer.parseInt(props.getProperty("ssh_port", "0"));
-			this.password = props.getProperty("ssh_password", "");
-			this.remoteDirectory = props.getProperty("ssh_remote_directory", "");
+			this.remoteDirectory = props.getProperty("ssh_remote_directory", null);
+			this.url = props.getProperty("ssh_url", null);
+			this.keyFile = props.getProperty("ssh_key_file");
+			if (this.keyFile == null || this.keyFile.isEmpty()) keyFile = System.getProperty("user.home") + "/.ssh/id_rsa";
+			this.keyFilePassphrase = props.getProperty("ssh_key_file_passphrase", null);
+			this.password = props.getProperty("ssh_password", null);
 		}
 	}
 }

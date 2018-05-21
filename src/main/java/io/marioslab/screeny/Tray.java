@@ -2,6 +2,7 @@
 package io.marioslab.screeny;
 
 import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -31,22 +32,12 @@ public class Tray {
 			MenuItem openConfig = new MenuItem("Open config");
 			MenuItem resetConfig = new MenuItem("Reset config");
 			MenuItem openLog = new MenuItem("Open logs");
+
 			MenuItem close = new MenuItem("Quit");
 			menu.add(openConfig);
 			menu.add(resetConfig);
 			menu.add(openLog);
 			menu.add(close);
-
-			openConfig.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed (ActionEvent event) {
-					try {
-						Desktop.getDesktop().edit(Config.CONFIG_FILE);
-					} catch (Throwable e) {
-						Main.failError("Couldn't open config file", e);
-					}
-				}
-			});
 
 			resetConfig.addActionListener(new ActionListener() {
 				@Override

@@ -7,11 +7,18 @@ screenshot = META 2
 app_screenshot = META ALT SHIFT 4
 region_screenshot = META 4
 
-# The local directory to save files to, defaults to Desktop/
+# The local directory to save files to, defaults to <user home>/Desktop/
+local_enabled = true
 local_directory = 
 
-# Specify SSH configuration to upload to your server
+# Specify SSH configuration to upload to your server. ssh_key_file, ssh_key_file_passphrase
+# and ssh_password are optional. If no ssh_key_file is given, <user home>/.ssh/id_rsa is tried
+ssh_enabled = true
+ssh_user = badlogic
 ssh_host = marioslab.io
 ssh_port = 22
-ssh_remote_directory = /home/badlogic/libgdx.badlogicgames.com/uploads
+ssh_remote_directory = /home/badlogic/libgdx.badlogicgames.com/www/uploads
 ssh_url = http://libgdx.badlogicgames.com/uploads/
+ssh_key_file =
+ssh_key_file_passphrase = 
+ssh_password =

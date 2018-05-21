@@ -17,6 +17,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<jnativehook.version>2.1.0</jnativehook.version>
+		<jsch.version>0.1.54</jsch.version>
 		<junit.version>4.12</junit.version>
 	</properties>
 
@@ -33,6 +34,12 @@
 			<artifactId>jnativehook</artifactId>
 			<version>${jnativehook.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>${jsch.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -47,7 +54,7 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.1.0</version>
