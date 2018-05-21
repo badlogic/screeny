@@ -1,5 +1,5 @@
 
-package io.marioslab.screeny;
+package io.marioslab.screeny.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -7,7 +7,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import io.marioslab.screeny.Config.LocalStorageConfig;
+import io.marioslab.screeny.Config.SshStorageConfig;
+import io.marioslab.screeny.Config.StorageConfig;
+import io.marioslab.screeny.RuntimeTypeAdapterFactory;
+
 public class Utils {
+	// @off
+	private final static Gson gson = new GsonBuilder()
+		.registerTypeAdapterFactory(
+			RuntimeTypeAdapterFactory.of(StorageConfig.class)
+				.registerSubtype(LocalStorageConfig.class, "LocalStorageConfig")
+				.registerSubtype(SshStorageConfig.class, "SshStorageConfig"))
+		.setPrettyPrinting().create();
+	// @on
+
 	public static byte[] readBytes (InputStream in) throws IOException {
 		try (InputStream input = in) {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -34,5 +51,13 @@ public class Utils {
 		try (FileOutputStream out = new FileOutputStream(file, append)) {
 			out.write(text.getBytes("UTF-8"));
 		}
+	}
+
+	public static String toJson (Object obj) {
+		return gson.toJson(obj);
+	}
+
+	public static <T> T fromJson (String json, Class<T> clazz) {
+		return gson.fromJson(json, clazz);
 	}
 }

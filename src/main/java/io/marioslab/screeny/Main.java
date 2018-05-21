@@ -8,13 +8,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.marioslab.screeny.Config.Hotkey;
-import io.marioslab.screeny.HotkeyDetector.HotkeyAction;
-import io.marioslab.screeny.HotkeyDetector.HotkeyCallback;
-import io.marioslab.screeny.platform.PlatformAWT;
-import io.marioslab.screeny.platform.PlatformMac;
 import io.marioslab.screeny.storage.LocalStorage;
 import io.marioslab.screeny.storage.SshStorage;
+import io.marioslab.screeny.ui.UI;
+import io.marioslab.screeny.utils.PlatformAWT;
+import io.marioslab.screeny.utils.PlatformMac;
+import io.marioslab.screeny.utils.Utils;
+import javafx.application.Application;
 
 public class Main {
 	public static final File LOG_FILE = new File(System.getProperty("user.home") + "/.screeny.log");
@@ -35,6 +35,7 @@ public class Main {
 		storages.add(new LocalStorage());
 		storages.add(new SshStorage());
 		loadConfig();
+		Application.launch(UI.class);
 
 		while (true)
 			Thread.sleep(1000);
@@ -78,34 +79,13 @@ public class Main {
 						lastModificationTime = Config.CONFIG_FILE.lastModified();
 
 						synchronized (Main.class) {
-							Main.config = new Config();
+							Main.config = Config.load();
 						}
 
-						HotkeyAction screenshot = new HotkeyAction(Action.Screenshot, config.getHotkeys().get(Action.Screenshot),
-							new HotkeyCallback() {
-								@Override
-								public void hotkey (Action action, Hotkey hotkey) {
-									Screenshot.takeScreenshot();
-								}
-							});
-
-						HotkeyAction appScreenshot = new HotkeyAction(Action.AppScreenshot, config.getHotkeys().get(Action.AppScreenshot),
-							new HotkeyCallback() {
-								@Override
-								public void hotkey (Action action, Hotkey hotkey) {
-									Screenshot.takeAppScreenshot();
-								}
-							});
-
-						HotkeyAction regionScreenshot = new HotkeyAction(Action.RegionScreenshot,
-							config.getHotkeys().get(Action.RegionScreenshot), new HotkeyCallback() {
-								@Override
-								public void hotkey (Action action, Hotkey hotkey) {
-									Screenshot.takeRegionScreenshot();
-								}
-							});
-
-						detector.setHotkeyActions(screenshot, appScreenshot, regionScreenshot);
+						detector.clearHotkeyActions();
+						detector.addHotkeyAction(Main.config.screenshotHotkey, () -> Screenshot.takeScreenshot());
+						detector.addHotkeyAction(Main.config.appScreenshotHotkey, () -> Screenshot.takeAppScreenshot());
+						detector.addHotkeyAction(Main.config.regionScreenshotHotkey, () -> Screenshot.takeRegionScreenshot());
 					}
 
 					try {

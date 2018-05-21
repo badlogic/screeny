@@ -1,5 +1,5 @@
 
-package io.marioslab.screeny.platform;
+package io.marioslab.screeny.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import io.marioslab.screeny.Main;
 import io.marioslab.screeny.Platform;
-import io.marioslab.screeny.Utils;
 
 public class PlatformMac implements Platform {
 	private static final File OUTPUT_FILE = new File(System.getProperty("java.io.tmpdir"), "capture.png");

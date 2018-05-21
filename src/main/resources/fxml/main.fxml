@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.marioslab.screeny.ui.MainController">
+   <children>
+      <JFXToggleButton fx:id="timestamp" size="8.0" text="Add timstamp to filename" />
+      <JFXToggleButton fx:id="randomId" size="8.0" text="Add random id to filename" />
+      <HBox>
+         <children>
+            <JFXTextField fx:id="screenshotHotkey" labelFloat="true" promptText="Desktop screenshot hotkey" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+      </HBox>
+      <JFXTextField fx:id="appHotkey" labelFloat="true" promptText="App screenshot hotkey">
+         <VBox.margin>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </VBox.margin>
+      </JFXTextField>
+      <JFXTextField fx:id="regionHotkey" labelFloat="true" promptText="Region screenshot hotkey">
+         <VBox.margin>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </VBox.margin>
+      </JFXTextField>
+   </children>
+</VBox>

@@ -1,5 +1,5 @@
 
-package io.marioslab.screeny.platform;
+package io.marioslab.screeny.utils;
 
 import java.awt.AWTException;
 import java.awt.Color;

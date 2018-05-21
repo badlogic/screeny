@@ -20,92 +20,96 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-import io.marioslab.screeny.Config.SshConfig;
+import io.marioslab.screeny.Config.SshStorageConfig;
 import io.marioslab.screeny.Main;
 import io.marioslab.screeny.Storage;
 
 public class SshStorage implements Storage {
 	@Override
 	public String save (BufferedImage image, String fileName) {
-		SshConfig config = Main.getConfig().getSshConfig();
-		if (config.user == null || config.user.isEmpty()) Main.logError("No SSH user specified in configuration", null);
-		if (config.host == null || config.host.isEmpty()) Main.logError("No SSH host specified in configuration", null);
-		if (config.port == 0) Main.logError("No SSH port specified in configuration", null);
-		if (config.remoteDirectory == null || config.remoteDirectory.isEmpty())
-			Main.logError("No SSH remote directory specified in configuration", null);
-		if (config.url == null || config.url.isEmpty()) Main.logError("No SSH URL specified in configuration", null);
+		for (SshStorageConfig config : Main.getConfig().getEnabledStorageConfigs(SshStorageConfig.class)) {
+			if (config.user == null || config.user.isEmpty()) Main.logError("No SSH user specified in configuration", null);
+			if (config.host == null || config.host.isEmpty()) Main.logError("No SSH host specified in configuration", null);
+			if (config.port == 0) Main.logError("No SSH port specified in configuration", null);
+			if (config.remoteDirectory == null || config.remoteDirectory.isEmpty())
+				Main.logError("No SSH remote directory specified in configuration", null);
+			if (config.url == null || config.url.isEmpty()) Main.logError("No SSH URL specified in configuration", null);
 
-		Session session = null;
-		Channel channel = null;
-		try {
-			JSch jsch = new JSch();
+			Session session = null;
+			Channel channel = null;
+			try {
+				JSch jsch = new JSch();
 
-			if (new File(config.keyFile).exists()) {
-				if (config.keyFilePassphrase != null && !config.keyFilePassphrase.isEmpty()) {
-					jsch.addIdentity(config.keyFile, config.keyFilePassphrase);
-				} else {
-					jsch.addIdentity(config.keyFile);
-				}
-			}
-
-			session = jsch.getSession(config.user, config.host, config.port);
-			session.setConfig("StrictHostKeyChecking", "no");
-			session.setPassword(config.password);
-			session.connect();
-
-			String command = "scp -t " + config.remoteDirectory;
-			channel = session.openChannel("exec");
-			((ChannelExec)channel).setCommand(command);
-
-			try (OutputStream out = new BufferedOutputStream(channel.getOutputStream());
-				InputStream in = new BufferedInputStream(channel.getInputStream())) {
-				channel.connect();
-
-				waitAck(in);
-
-				File file = new File(System.getProperty("java.io.tmpdir"), "ssh-temp.png");
-				ImageIO.write(image, "png", file);
-				long fileSize = file.length();
-				command = "C0644 " + fileSize + " ";
-				command += fileName;
-				command += "\n";
-
-				out.write(command.getBytes("UTF-8"));
-				out.flush();
-
-				waitAck(in);
-
-				try (FileInputStream fis = new FileInputStream(file)) {
-					byte[] buffer = new byte[1024 * 100];
-
-					while (true) {
-						int len = fis.read(buffer);
-						if (len <= 0) {
-							break;
+				if (config.useKeyFile) {
+					if (new File(config.keyFile).exists()) {
+						if (config.keyFilePassphrase != null && !config.keyFilePassphrase.isEmpty()) {
+							jsch.addIdentity(config.keyFile, config.keyFilePassphrase);
+						} else {
+							jsch.addIdentity(config.keyFile);
 						}
-						out.write(buffer, 0, len);
 					}
-					writeAck(out);
-					out.flush();
-					waitAck(in);
 				}
+
+				session = jsch.getSession(config.user, config.host, config.port);
+				session.setConfig("StrictHostKeyChecking", "no");
+				session.setPassword(config.password);
+				session.connect();
+
+				String command = "scp -t " + config.remoteDirectory;
+				channel = session.openChannel("exec");
+				((ChannelExec)channel).setCommand(command);
+
+				try (OutputStream out = new BufferedOutputStream(channel.getOutputStream());
+					InputStream in = new BufferedInputStream(channel.getInputStream())) {
+					channel.connect();
+
+					waitAck(in);
+
+					File file = new File(System.getProperty("java.io.tmpdir"), "ssh-temp.png");
+					ImageIO.write(image, "png", file);
+					long fileSize = file.length();
+					command = "C0644 " + fileSize + " ";
+					command += fileName;
+					command += "\n";
+
+					out.write(command.getBytes("UTF-8"));
+					out.flush();
+
+					waitAck(in);
+
+					try (FileInputStream fis = new FileInputStream(file)) {
+						byte[] buffer = new byte[1024 * 100];
+
+						while (true) {
+							int len = fis.read(buffer);
+							if (len <= 0) {
+								break;
+							}
+							out.write(buffer, 0, len);
+						}
+						writeAck(out);
+						out.flush();
+						waitAck(in);
+					}
+				}
+				channel.disconnect();
+				session.disconnect();
+				String url = (!config.url.endsWith("/") ? config.url + "/" : config.url) + fileName;
+
+				StringSelection selection = new StringSelection(url);
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipboard.setContents(selection, selection);
+
+				Main.log("Stored screenshot to remote file " + url);
+				return url;
+			} catch (Throwable e) {
+				if (channel != null) channel.disconnect();
+				if (session != null) session.disconnect();
+				Main.logError("Couldn't transfer image via ssh.", e);
 			}
-			channel.disconnect();
-			session.disconnect();
-			String url = (!config.url.endsWith("/") ? config.url + "/" : config.url) + fileName;
-
-			StringSelection selection = new StringSelection(url);
-			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-			clipboard.setContents(selection, selection);
-
-			Main.log("Stored screenshot to remote file " + url);
-			return url;
-		} catch (Throwable e) {
-			if (channel != null) channel.disconnect();
-			if (session != null) session.disconnect();
-			Main.logError("Couldn't transfer image via ssh.", e);
 		}
 		return null;
+
 	}
 
 	private static void writeAck (OutputStream out) throws IOException {

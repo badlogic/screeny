@@ -1,8 +1,10 @@
 
 package io.marioslab.screeny;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,11 +14,9 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
-import io.marioslab.screeny.Config.Hotkey;
-
 public class HotkeyDetector {
 	private final Set<Integer> pressedKeys = new HashSet<Integer>();
-	private HotkeyAction[] actions = new HotkeyAction[0];
+	private List<HotkeyAction> actions = new ArrayList<HotkeyAction>();
 
 	public HotkeyDetector () {
 		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
@@ -32,12 +32,14 @@ public class HotkeyDetector {
 		GlobalScreen.addNativeKeyListener(new NativeKeyAdapter() {
 			@Override
 			public void nativeKeyPressed (NativeKeyEvent keyEvent) {
-				pressedKeys.add(keyEvent.getKeyCode());
+				synchronized (pressedKeys) {
+					pressedKeys.add(keyEvent.getKeyCode());
+				}
 
 				synchronized (this) {
 					for (HotkeyAction action : actions) {
 						if (action.matches(pressedKeys)) {
-							action.callback.hotkey(action.action, action.hotkey);
+							action.callback.hotkey();
 							break;
 						}
 					}
@@ -46,46 +48,64 @@ public class HotkeyDetector {
 
 			@Override
 			public void nativeKeyReleased (NativeKeyEvent keyEvent) {
-				pressedKeys.remove(keyEvent.getKeyCode());
+				synchronized (pressedKeys) {
+					pressedKeys.remove(keyEvent.getKeyCode());
+				}
 			}
 		});
 
 		Main.log("Setup hotkey detector.");
 	}
 
-	public void setHotkeyActions (HotkeyAction... actions) {
-		Arrays.sort(actions);
-		synchronized (this) {
-			this.actions = actions;
+	public int[] getPressedKeys () {
+		synchronized (pressedKeys) {
+			int[] keys = new int[pressedKeys.size()];
+			int i = 0;
+			for (Integer key : pressedKeys) {
+				keys[i++] = key;
+			}
+			return keys;
 		}
 	}
 
-	public static class HotkeyAction implements Comparable<HotkeyAction> {
-		public final Action action;
-		public final Hotkey hotkey;
+	public void clearHotkeyActions () {
+		synchronized (this) {
+			actions.clear();
+		}
+	}
+
+	public void addHotkeyAction (int[] hotkey, HotkeyCallback callback) {
+		synchronized (this) {
+			actions.add(new HotkeyAction(hotkey, callback));
+			Collections.sort(actions);
+		}
+	}
+
+	private static class HotkeyAction implements Comparable<HotkeyAction> {
+		public final Set<Integer> hotkey = new HashSet<Integer>();
 		public final HotkeyCallback callback;
 
-		public HotkeyAction (Action action, Hotkey hotkey, HotkeyCallback callback) {
-			this.action = action;
-			this.hotkey = hotkey;
+		public HotkeyAction (int[] hotkey, HotkeyCallback callback) {
+			for (int key : hotkey)
+				this.hotkey.add(key);
 			this.callback = callback;
 		}
 
 		public boolean matches (Set<Integer> pressedKeys) {
-			if (hotkey.keys.size() == 0) return false;
-			if (hotkey.keys.size() != pressedKeys.size()) return false;
-			for (Integer key : hotkey.keys)
+			if (hotkey.size() == 0) return false;
+			if (hotkey.size() != pressedKeys.size()) return false;
+			for (Integer key : hotkey)
 				if (!pressedKeys.contains(key)) return false;
 			return true;
 		}
 
 		@Override
 		public int compareTo (HotkeyAction o) {
-			return o.hotkey.keys.size() - hotkey.keys.size();
+			return o.hotkey.size() - hotkey.size();
 		}
 	}
 
 	public static interface HotkeyCallback {
-		public void hotkey (Action action, Hotkey hotkey);
+		public void hotkey ();
 	}
 }
