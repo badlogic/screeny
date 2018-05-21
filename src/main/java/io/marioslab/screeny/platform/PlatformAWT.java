@@ -72,9 +72,9 @@ public class PlatformAWT implements Platform {
 					}
 				}
 			});
+			setTitle("Screeny");
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			setTitle("Screeny");
 			setSize(screenSize);
 			setUndecorated(true);
 			setBackground(new Color(0, 0, 0, 0));
