@@ -34,7 +34,7 @@ public class HotkeyDetector {
 			public void nativeKeyPressed (NativeKeyEvent keyEvent) {
 				synchronized (pressedKeys) {
 					pressedKeys.add(keyEvent.getKeyCode());
-					System.out.println(pressedKeys);
+					// System.out.println(pressedKeys);
 				}
 
 				synchronized (this) {
@@ -51,7 +51,7 @@ public class HotkeyDetector {
 			public void nativeKeyReleased (NativeKeyEvent keyEvent) {
 				synchronized (pressedKeys) {
 					pressedKeys.remove(keyEvent.getKeyCode());
-					System.out.println(pressedKeys);
+					// System.out.println(pressedKeys);
 				}
 			}
 		});
