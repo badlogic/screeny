@@ -2,7 +2,9 @@
 package io.marioslab.screeny.utils;
 
 import java.awt.AWTException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CountDownLatch;
 
@@ -35,24 +37,23 @@ public class PlatformJavaFX implements Platform {
 	}
 
 	@Override
-	public BufferedImage takeScreenshot () {
-		Rectangle2D bounds = Screen.getPrimary().getBounds();
-		java.awt.Rectangle awtBounds = new java.awt.Rectangle((int)bounds.getMinX(), (int)bounds.getMinY(), (int)bounds.getWidth(),
-			(int)bounds.getHeight());
-		return roboCapture(awtBounds);
+	public BufferedImage takeScreenshot () {		
+		return roboCapture(new java.awt.Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 	}
 
 	@Override
 	public BufferedImage takeAppScreenshot () {
-		Rectangle2D bounds = Screen.getPrimary().getBounds();
-		java.awt.Rectangle awtBounds = new java.awt.Rectangle((int)bounds.getMinX(), (int)bounds.getMinY(), (int)bounds.getWidth(),
-			(int)bounds.getHeight());
-		return roboCapture(awtBounds);
+		return roboCapture(new java.awt.Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 	}
 
 	@Override
 	public BufferedImage takeRegionScreenshot () {
 		java.awt.Rectangle bounds = new Selection().start();
+		double scale = Toolkit.getDefaultToolkit().getScreenSize().width / Screen.getPrimary().getBounds().getWidth();
+		bounds.x *= scale;
+		bounds.y *= scale;
+		bounds.width *= scale;
+		bounds.height *= scale;
 		if (bounds != null) return roboCapture(bounds);
 		return null;
 	}
@@ -82,7 +83,7 @@ public class PlatformJavaFX implements Platform {
 					}
 				};
 
-				Scene scene = new Scene(root, Color.TRANSPARENT);
+				Scene scene = new Scene(root, new Color(0, 0, 0, 0.2));
 
 				stage = new Stage();
 				stage.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
@@ -96,16 +97,16 @@ public class PlatformJavaFX implements Platform {
 
 				stage.addEventHandler(MouseEvent.MOUSE_DRAGGED, (event) -> {
 					if (startX == -1) {
-						startX = event.getSceneX();
-						startY = event.getSceneY();
+						startX = event.getScreenX();
+						startY = event.getScreenY();
 					}
-					endX = event.getSceneX();
-					endY = event.getSceneY();
+					endX = event.getScreenX();
+					endY = event.getScreenY();
 				});
 
 				stage.addEventHandler(MouseEvent.MOUSE_RELEASED, (event) -> {
-					endX = event.getSceneX();
-					endY = event.getSceneY();
+					endX = event.getScreenX();
+					endY = event.getScreenY();
 					stage.close();
 					loop.stop();
 					latch.countDown();
