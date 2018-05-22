@@ -11,7 +11,7 @@ import java.util.List;
 import io.marioslab.screeny.storage.LocalStorage;
 import io.marioslab.screeny.storage.SshStorage;
 import io.marioslab.screeny.ui.UI;
-import io.marioslab.screeny.utils.PlatformAWT;
+import io.marioslab.screeny.utils.PlatformJavaFX;
 import io.marioslab.screeny.utils.PlatformMac;
 import io.marioslab.screeny.utils.Utils;
 import javafx.application.Application;
@@ -65,7 +65,7 @@ public class Main {
 
 	private static Platform newPlatform () {
 		if (System.getProperty("os.name").toLowerCase().contains("mac")) return new PlatformMac();
-		return new PlatformAWT();
+		return new PlatformJavaFX();
 	}
 
 	private static void loadConfig () {

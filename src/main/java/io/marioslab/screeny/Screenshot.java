@@ -9,6 +9,7 @@ public class Screenshot {
 	static Robot robot;
 
 	private static void saveScreenshot (BufferedImage image) {
+		if (image == null) return;
 		String fileName = UUID.randomUUID().toString() + ".png";
 		for (Storage storage : Main.getStorages()) {
 			storage.save(image, fileName);

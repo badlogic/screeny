@@ -19,6 +19,7 @@ public class PlatformMac implements Platform {
 			int result = process.waitFor();
 			if (result != 0) {
 				Main.logError("Couldn't capture region screenshot.", null);
+				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
@@ -35,6 +36,7 @@ public class PlatformMac implements Platform {
 			int result = process.waitFor();
 			if (result != 0) {
 				Main.logError("Couldn't capture region screenshot: " + Utils.readString(process.getInputStream()), null);
+				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
@@ -51,6 +53,7 @@ public class PlatformMac implements Platform {
 			int result = process.waitFor();
 			if (result != 0) {
 				Main.logError("Couldn't capture region screenshot.", null);
+				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
