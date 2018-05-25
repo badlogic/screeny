@@ -6,7 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import io.marioslab.screeny.Main;
+import io.marioslab.screeny.Screeny;
 import io.marioslab.screeny.Platform;
 
 public class PlatformMac implements Platform {
@@ -18,12 +18,12 @@ public class PlatformMac implements Platform {
 			Process process = new ProcessBuilder().command("/usr/sbin/screencapture", "-x", "-m", OUTPUT_FILE.getAbsolutePath()).start();
 			int result = process.waitFor();
 			if (result != 0) {
-				Main.logError("Couldn't capture region screenshot.", null);
+				Log.error("Couldn't capture region screenshot.", null);
 				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
-			Main.logError("Couldn't capture region screenshot.", e);
+			Log.error("Couldn't capture region screenshot.", e);
 			return null;
 		}
 	}
@@ -35,12 +35,12 @@ public class PlatformMac implements Platform {
 				.command("/usr/sbin/screencapture", "-i", "-o", "-w", "-W", "-x", OUTPUT_FILE.getAbsolutePath()).start();
 			int result = process.waitFor();
 			if (result != 0) {
-				Main.logError("Couldn't capture region screenshot: " + Utils.readString(process.getInputStream()), null);
+				Log.error("Couldn't capture region screenshot: " + Utils.readString(process.getInputStream()), null);
 				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
-			Main.logError("Couldn't capture region screenshot.", e);
+			Log.error("Couldn't capture region screenshot.", e);
 			return null;
 		}
 	}
@@ -52,12 +52,12 @@ public class PlatformMac implements Platform {
 				.start();
 			int result = process.waitFor();
 			if (result != 0) {
-				Main.logError("Couldn't capture region screenshot.", null);
+				Log.error("Couldn't capture region screenshot.", null);
 				return null;
 			}
 			return ImageIO.read(OUTPUT_FILE);
 		} catch (Throwable e) {
-			Main.logError("Couldn't capture region screenshot.", e);
+			Log.error("Couldn't capture region screenshot.", e);
 			return null;
 		}
 	}

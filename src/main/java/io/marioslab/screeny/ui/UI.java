@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.marioslab.screeny.Main;
+import io.marioslab.screeny.utils.Log;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +19,7 @@ import javafx.stage.StageStyle;
 public class UI extends Application {
 	public static UI instance;
 	public static Stage mainStage;
+	public static MainController mainController;
 	private static final List<Stage> notifications = new ArrayList<Stage>();
 
 	@Override
@@ -27,14 +28,18 @@ public class UI extends Application {
 		UI.mainStage = stage;
 
 		Platform.setImplicitExit(false);
+		stage.initStyle(StageStyle.UTILITY);
 		stage.setAlwaysOnTop(true);
 		stage.setTitle("Screeny");
+
+		showMain();
 	}
 
 	public static void showMain () {
 		Platform.runLater( () -> {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(UI.class.getResource("/fxml/main.fxml"));
+			loader.setController(new MainController());
 			Pane root;
 			try {
 				root = loader.<Pane> load();
@@ -42,7 +47,7 @@ public class UI extends Application {
 				mainStage.setScene(scene);
 				mainStage.show();
 			} catch (IOException e) {
-				Main.logError("Couldn't load UI.", e);
+				Log.error("Couldn't load UI.", e);
 			}
 		});
 	}
@@ -85,7 +90,7 @@ public class UI extends Application {
 					stage.setY(y);
 				});
 			} catch (IOException e) {
-				Main.logError("Couldn't load UI.", e);
+				Log.error("Couldn't create notification.", e);
 			}
 		});
 	}

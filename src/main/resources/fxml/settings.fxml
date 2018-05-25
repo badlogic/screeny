@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="settings" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+   </padding>
+   <children>
+      <Label styleClass="heading" text="Hotkeys">
+         <VBox.margin>
+            <Insets bottom="32.0" />
+         </VBox.margin>
+      </Label>
+      <JFXTextField fx:id="desktopHotkey" labelFloat="true" prefHeight="32.0" promptText="Desktop screenshot">
+         <VBox.margin>
+            <Insets bottom="32.0" />
+         </VBox.margin>
+      </JFXTextField>
+      <JFXTextField fx:id="appHotkey" labelFloat="true" prefHeight="32.0" promptText="Application screenshot">
+         <VBox.margin>
+            <Insets bottom="32.0" />
+         </VBox.margin>
+      </JFXTextField>
+      <JFXTextField fx:id="regionHotkey" labelFloat="true" prefHeight="32.0" promptText="Region screenshot">
+         <VBox.margin>
+            <Insets bottom="32.0" />
+         </VBox.margin>
+      </JFXTextField>
+      <Label styleClass="heading" text="Storage">
+         <VBox.margin>
+            <Insets bottom="24.0" />
+         </VBox.margin>
+      </Label>
+      <JFXComboBox labelFloat="true" promptText="Save images to" />
+   </children>
+</VBox>

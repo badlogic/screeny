@@ -9,11 +9,12 @@ import java.util.List;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 
+import io.marioslab.screeny.utils.Log;
 import io.marioslab.screeny.utils.Utils;
 
 public class Config {
 	/** Default location of the config file **/
-	public static final File CONFIG_FILE = new File(System.getProperty("user.home") + "/.screeny.json");
+	public static final File CONFIG_FILE = new File(Screeny.APP_DIR, "config.json");
 
 	/** Whether to add a timestamp at the end of the file **/
 	public boolean addTimestampToFilename = true;
@@ -28,7 +29,7 @@ public class Config {
 	public int[] regionScreenshotHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_5};
 
 	/** Storage configurations */
-	public List<StorageConfig> storageConfigs = Arrays.asList(new LocalStorageConfig(), new SshStorageConfig());
+	public List<StorageConfig> storageConfigs = Arrays.asList(new LocalStorageConfig(), new ScpStorageConfig());
 
 	Config () {
 	}
@@ -44,7 +45,7 @@ public class Config {
 				return Utils.fromJson(Utils.readString(new FileInputStream(CONFIG_FILE)), Config.class);
 			}
 		} catch (Exception e) {
-			Main.logError("Couldn't load configuration.", e);
+			Log.error("Couldn't load configuration.", e);
 			return new Config();
 		}
 	}
@@ -54,7 +55,7 @@ public class Config {
 		try {
 			Utils.writeToFile(CONFIG_FILE, Utils.toJson(this), false);
 		} catch (Exception e) {
-			Main.logError("Couldn't save configuration.", e);
+			Log.error("Couldn't save configuration.", e);
 		}
 	}
 
@@ -89,9 +90,9 @@ public class Config {
 		}
 	}
 
-	/** SSH storage configuration, including user@host:port triple, remote directory, URL at which the uploads will be available,
+	/** Scp storage configuration, including user@host:port triple, remote directory, URL at which the uploads will be available,
 	 * and optionally a pasword, SSH key file and key file passphrase. */
-	public static class SshStorageConfig extends StorageConfig {
+	public static class ScpStorageConfig extends StorageConfig {
 		public String user;
 		public String host;
 		public int port;

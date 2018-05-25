@@ -11,9 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.marioslab.screeny.Config.LocalStorageConfig;
-import io.marioslab.screeny.Config.SshStorageConfig;
+import io.marioslab.screeny.Config.ScpStorageConfig;
 import io.marioslab.screeny.Config.StorageConfig;
-import io.marioslab.screeny.RuntimeTypeAdapterFactory;
 
 public class Utils {
 	// @off
@@ -21,7 +20,7 @@ public class Utils {
 		.registerTypeAdapterFactory(
 			RuntimeTypeAdapterFactory.of(StorageConfig.class)
 				.registerSubtype(LocalStorageConfig.class, "LocalStorageConfig")
-				.registerSubtype(SshStorageConfig.class, "SshStorageConfig"))
+				.registerSubtype(ScpStorageConfig.class, "SshStorageConfig"))
 		.setPrettyPrinting().create();
 	// @on
 

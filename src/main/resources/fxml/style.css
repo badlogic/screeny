@@ -1,1 +1,105 @@
+* {
+	-color-primary: #F44336;
+	-color-primary-dark: #D32F2F;
+	-color-primary-light: #FFCDD2;
+	-color-accent: #8BC34A;
+	
+	-color-background: #ffffff;
+	-color-text: #212121;
+	-color-text-secondary: #757575;
+	-color-text-on-primary: #ffffff;
+	-color-divider: #757575;
+}
 
+.root {
+	-fx-background-color: -color-background;	
+}
+
+.separator {
+	-fx-border-style: solid;
+	-fx-border-width: 0 0 1 0;
+	-fx-fill: -color-divider;
+}
+
+.selected {
+	-fx-background-color: -color-primary-light !important;
+}
+
+.selected .label {
+	-fx-text-fill: -color-primary-dark !important;
+}
+
+.selected .glyph-icon {
+	-fx-fill: -color-primary-dark !important;
+}
+
+.navigation {
+	-fx-background-color: -color-primary;	
+	-fx-effect: dropShadow(gaussian, rgb(0, 0, 0, 0.26), 10, 0.12, -1, 0);
+}
+
+.navigation-title {
+	-fx-font-size: 24;
+	-fx-text-fill: -color-text-on-primary;	
+}
+
+.navigation-button {	
+	-fx-background-radius: 4px;
+	-fx-cursor: hand;
+}
+
+.navigation-button .glyph-icon {
+	-glyph-size: 24px;
+	-fx-fill: -color-text-on-primary;		
+}
+
+.navigation-button .label {
+	-fx-font-size: 16px;
+	-fx-text-fill: -color-text-on-primary;	
+}
+
+.navigation-button:hover {
+	-fx-background-color: -color-primary-light;	
+}
+
+.navigation-button:hover .label {
+	-fx-text-fill: -color-text-on-primary !important;	
+}
+
+.navigation-button:hover .glyph-icon {
+	-fx-fill: -color-text-on-primary;
+}
+
+.navbar {
+	-fx-background-color: -color-background;
+	-fx-effect: dropShadow(gaussian, rgb(0, 0, 0, 0.26), 3, 0.12, 0, 1);
+}
+
+.navbar {
+	-fx-font-size: 16px;		
+}
+
+.navbar .label {
+	-fx-font-weight: bold;	
+}
+
+.navbar .glyph-icon {
+	-glyph-size: 24px;
+	-fx-font-weight: normal;
+	-fx-cursor: hand;
+}
+
+.settings {
+	
+}
+
+.settings .heading {
+	-fx-font-size: 24px;
+	-fx-font-weight: bold;	
+}
+
+.settings .jfx-text-field {
+	-fx-font-size: 16px;
+	-jfx-focus-color: -color-primary;
+	-jfx-unfocus-color: -color-text;
+}

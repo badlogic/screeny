@@ -14,16 +14,16 @@ public class Screenshot {
 	private static void saveScreenshot (BufferedImage image) {
 		if (image == null) return;
 		String fileName = ".png";
-		if (Main.getConfig().addTimestampToFilename)
+		if (Screeny.getConfig().addTimestampToFilename)
 			fileName = new SimpleDateFormat("yyyymmdd-HHmmss").format(new Date()) + fileName;
-		if (Main.getConfig().addUIDToFilename) {
+		if (Screeny.getConfig().addUIDToFilename) {
 			String id = Base64.getEncoder().encodeToString(asByteArray(UUID.randomUUID()));
 			id = id.replace("==", "").replace("/", "a").replace("+", "b");
 			fileName = id + "-" + fileName;
 		}
 
 		System.out.println(fileName);
-		for (Storage storage : Main.getStorages()) {
+		for (Storage storage : Screeny.getStorages()) {
 			storage.save(image, fileName);
 		}
 	}
@@ -43,14 +43,14 @@ public class Screenshot {
 	}
 
 	public static void takeScreenshot () {
-		saveScreenshot(Main.getPlatform().takeScreenshot());
+		saveScreenshot(Screeny.getPlatform().takeScreenshot());
 	}
 
 	public static void takeAppScreenshot () {
-		saveScreenshot(Main.getPlatform().takeAppScreenshot());
+		saveScreenshot(Screeny.getPlatform().takeAppScreenshot());
 	}
 
 	public static void takeRegionScreenshot () {
-		saveScreenshot(Main.getPlatform().takeRegionScreenshot());
+		saveScreenshot(Screeny.getPlatform().takeRegionScreenshot());
 	}
 }

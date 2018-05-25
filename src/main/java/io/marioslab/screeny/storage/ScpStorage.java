@@ -20,33 +20,34 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-import io.marioslab.screeny.Config.SshStorageConfig;
-import io.marioslab.screeny.Main;
+import io.marioslab.screeny.Config.ScpStorageConfig;
+import io.marioslab.screeny.Screeny;
 import io.marioslab.screeny.Storage;
 import io.marioslab.screeny.ui.UI;
+import io.marioslab.screeny.utils.Log;
 
-public class SshStorage implements Storage {
+public class ScpStorage implements Storage {
 	@Override
 	public String save (BufferedImage image, String fileName) {
-		for (SshStorageConfig config : Main.getConfig().getEnabledStorageConfigs(SshStorageConfig.class)) {
+		for (ScpStorageConfig config : Screeny.getConfig().getEnabledStorageConfigs(ScpStorageConfig.class)) {
 			if (config.user == null || config.user.isEmpty()) {
-				Main.logError("No SSH user specified in configuration", null);
+				Log.error("No Scp user specified in configuration", null);
 				return null;
 			}
 			if (config.host == null || config.host.isEmpty()) {
-				Main.logError("No SSH host specified in configuration", null);
+				Log.error("No Scp host specified in configuration", null);
 				return null;
 			}
 			if (config.port == 0) {
-				Main.logError("No SSH port specified in configuration", null);
+				Log.error("No Scp port specified in configuration", null);
 				return null;
 			}
 			if (config.remoteDirectory == null || config.remoteDirectory.isEmpty()) {
-				Main.logError("No SSH remote directory specified in configuration", null);
+				Log.error("No Scp remote directory specified in configuration", null);
 				return null;
 			}
 			if (config.url == null || config.url.isEmpty()) {
-				Main.logError("No SSH URL specified in configuration", null);
+				Log.error("No Scp URL specified in configuration", null);
 				return null;
 			}
 
@@ -115,13 +116,13 @@ public class SshStorage implements Storage {
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(selection, selection);
 
-				Main.log("Stored screenshot to remote file " + url);
+				Log.info("Stored screenshot to remote file " + url);
 				UI.showNotification("Upload complete", "Stored image to " + url);
 				return url;
 			} catch (Throwable e) {
 				if (channel != null) channel.disconnect();
 				if (session != null) session.disconnect();
-				Main.logError("Couldn't transfer image via ssh.", e);
+				Log.error("Couldn't transfer image via ssh.", e);
 			}
 		}
 		return null;
@@ -146,11 +147,11 @@ public class SshStorage implements Storage {
 			}
 
 			if (b == 1) {
-				throw new IOException("SSH error: " + builder.toString());
+				throw new IOException("Scp error: " + builder.toString());
 			} else if (b == 2) {
-				throw new IOException("SSH error: " + builder.toString());
+				throw new IOException("Scp error: " + builder.toString());
 			} else {
-				throw new IOException("SSH unknown response code " + b + ", " + builder.toString());
+				throw new IOException("Scp unknown response code " + b + ", " + builder.toString());
 			}
 		}
 	}

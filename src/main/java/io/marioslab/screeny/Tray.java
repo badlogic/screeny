@@ -11,12 +11,13 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 
 import io.marioslab.screeny.ui.UI;
+import io.marioslab.screeny.utils.Log;
 
 public class Tray {
 	public Tray () {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
-			Image image = Toolkit.getDefaultToolkit().createImage(Main.class.getResource("/icon.png"));
+			Image image = Toolkit.getDefaultToolkit().createImage(Screeny.class.getResource("/icon.png"));
 
 			TrayIcon trayIcon = new TrayIcon(image, "Screeny");
 			trayIcon.setImageAutoSize(true);
@@ -24,7 +25,8 @@ public class Tray {
 			try {
 				tray.add(trayIcon);
 			} catch (AWTException e) {
-				Main.failError("Couldn't set tray icon", e);
+				Log.error("Couldn't set tray icon", e);
+				Screeny.exit(-1);
 			}
 
 			PopupMenu menu = new PopupMenu();
@@ -41,9 +43,9 @@ public class Tray {
 
 			openLog.addActionListener( (event) -> {
 				try {
-					Desktop.getDesktop().edit(Main.LOG_FILE);
+					Desktop.getDesktop().edit(Log.LOG_FILE);
 				} catch (Throwable e) {
-					Main.failError("Couldn't open config file", e);
+					Log.error("Couldn't open config file", e);
 				}
 			});
 
@@ -52,7 +54,7 @@ public class Tray {
 			});
 
 			trayIcon.setPopupMenu(menu);
-			Main.log("Setup tray.");
+			Log.info("Setup tray.");
 		}
 	}
 }

@@ -14,6 +14,8 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
+import io.marioslab.screeny.utils.Log;
+
 public class HotkeyDetector {
 	private final Set<Integer> pressedKeys = new HashSet<Integer>();
 	private List<HotkeyAction> actions = new ArrayList<HotkeyAction>();
@@ -26,7 +28,7 @@ public class HotkeyDetector {
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException e) {
-			Main.failError("Couldn't register keyboard hooks", e);
+			Log.error("Couldn't register keyboard hooks", e);
 		}
 
 		GlobalScreen.addNativeKeyListener(new NativeKeyAdapter() {
@@ -56,7 +58,7 @@ public class HotkeyDetector {
 			}
 		});
 
-		Main.log("Setup hotkey detector.");
+		Log.info("Setup hotkey detector.");
 	}
 
 	public int[] getPressedKeys () {
