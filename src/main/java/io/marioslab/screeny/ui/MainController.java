@@ -9,6 +9,7 @@ import io.marioslab.screeny.utils.Log;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -36,15 +37,23 @@ public class MainController implements Initializable {
 		showSettings();
 	}
 
+	private void clearSelected () {
+		settings.getStyleClass().remove("selected");
+		storage.getStyleClass().remove("selected");
+	}
+
 	private void showSettings () {
+		clearSelected();
+		settings.getStyleClass().add("selected");
 		navbarBack.setVisible(false);
 		navbarTitle.setText("Settings");
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(UI.class.getResource("/fxml/settings.fxml"));
 		loader.setController(new SettingsController());
+
 		try {
-			Pane root = loader.<Pane> load();
+			Node root = loader.<Node> load();
 			VBox.setVgrow(root, Priority.ALWAYS);
 			content.getChildren().clear();
 			content.getChildren().add(root);
@@ -55,6 +64,23 @@ public class MainController implements Initializable {
 	}
 
 	private void showStorage () {
+		clearSelected();
+		storage.getStyleClass().add("selected");
+		navbarBack.setVisible(false);
+		navbarTitle.setText("Storage");
 
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(UI.class.getResource("/fxml/storage.fxml"));
+		loader.setController(new StorageController());
+
+		try {
+			Node root = loader.<Node> load();
+			VBox.setVgrow(root, Priority.ALWAYS);
+			content.getChildren().clear();
+			content.getChildren().add(root);
+
+		} catch (Exception e) {
+			Log.error("Couldn't load settings UI.", e);
+		}
 	}
 }

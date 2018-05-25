@@ -8,7 +8,7 @@
 	-color-text: #212121;
 	-color-text-secondary: #757575;
 	-color-text-on-primary: #ffffff;
-	-color-divider: #757575;
+	-color-divider: #AAAAAA;
 }
 
 .root {
@@ -19,6 +19,26 @@
 	-fx-border-style: solid;
 	-fx-border-width: 0 0 1 0;
 	-fx-fill: -color-divider;
+}
+
+.notification {
+	-fx-background-color: -color-background;
+}
+
+.notification-icon {
+	-glyph-size: 40px;
+}
+
+.notification-title {
+	-fx-font-size: 16px;
+}
+
+.notification-message {
+	-fx-font-size: 12px;
+}
+
+.notification-button {
+	-fx-font-size: 16px;
 }
 
 .selected {
@@ -63,7 +83,7 @@
 }
 
 .navigation-button:hover .label {
-	-fx-text-fill: -color-text-on-primary !important;	
+	-fx-text-fill: -color-text-on-primary;	
 }
 
 .navigation-button:hover .glyph-icon {
@@ -90,7 +110,6 @@
 }
 
 .settings {
-	
 }
 
 .settings .heading {
@@ -102,4 +121,44 @@
 	-fx-font-size: 16px;
 	-jfx-focus-color: -color-primary;
 	-jfx-unfocus-color: -color-text;
+}
+
+.content {	
+}
+
+.storage-new {
+	-fx-font-size: 24px;
+	-fx-background-radius: 24px;
+	-fx-background-color: -color-primary;
+	-fx-text-fill: -color-text-on-primary;	
+}
+
+.storage-item {
+	-fx-border-width: 0 0 1 0;
+	-fx-border-color: -color-divider;
+	-fx-cursor: hand;
+	-fx-background-color: -color-background;
+}
+
+.storage-item-name {
+	-fx-font-size: 16px;
+	-fx-text-fill: -color-text;
+}
+
+.storage-item-type {
+	-fx-font-size: 12px;
+	-fx-text-fill: -color-text-secondary;
+}
+
+.storage-item .glyph-icon {
+	-glyph-size: 0px;
+	-fx-fill: -color-text-secondary;
+}
+
+.storage-item:hover .glyph-icon {
+	-glyph-size: 24px;
+}
+
+.storage-item:hover .glyph-icon:hover {
+	-fx-fill: -color-text !important;
 }

@@ -1,6 +1,7 @@
 
 package io.marioslab.screeny.ui;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class UI extends Application {
 		UI.mainStage = stage;
 
 		Platform.setImplicitExit(false);
-		stage.initStyle(StageStyle.UTILITY);
+		// stage.initStyle(StageStyle.UTILITY);
 		stage.setAlwaysOnTop(true);
 		stage.setTitle("Screeny");
 
@@ -93,5 +94,9 @@ public class UI extends Application {
 				Log.error("Couldn't create notification.", e);
 			}
 		});
+	}
+
+	public static void showEdit (BufferedImage image) {
+		// TODO implement me
 	}
 }

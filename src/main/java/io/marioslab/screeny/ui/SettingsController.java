@@ -1,3 +1,4 @@
+
 package io.marioslab.screeny.ui;
 
 import java.net.URL;
@@ -18,6 +19,8 @@ public class SettingsController implements Initializable {
 	@FXML JFXTextField desktopHotkey;
 	@FXML JFXTextField appHotkey;
 	@FXML JFXTextField regionHotkey;
+	@FXML JFXTextField editNextHotkey;
+	@FXML JFXTextField settingsHotkey;
 
 	@Override
 	public void initialize (URL location, ResourceBundle resources) {
@@ -30,6 +33,8 @@ public class SettingsController implements Initializable {
 		desktopHotkey.setText(keysToString(config.screenshotHotkey));
 		appHotkey.setText(keysToString(config.appScreenshotHotkey));
 		regionHotkey.setText(keysToString(config.regionScreenshotHotkey));
+		editNextHotkey.setText(keysToString(config.editNextHotkey));
+		settingsHotkey.setText(keysToString(config.settingsHotkey));
 
 		desktopHotkey.addEventFilter(KeyEvent.ANY, (event) -> {
 			event.consume();
@@ -38,7 +43,7 @@ public class SettingsController implements Initializable {
 
 				int[] keys = Screeny.getKeyDetector().getPressedKeys();
 				config.screenshotHotkey = keys;
-				config.save();
+				Screeny.saveAndReloadConfig();
 				desktopHotkey.setText(keysToString(keys));
 			}
 		});
@@ -50,7 +55,7 @@ public class SettingsController implements Initializable {
 
 				int[] keys = Screeny.getKeyDetector().getPressedKeys();
 				config.appScreenshotHotkey = keys;
-				config.save();
+				Screeny.saveAndReloadConfig();
 				appHotkey.setText(keysToString(keys));
 			}
 		});
@@ -62,7 +67,31 @@ public class SettingsController implements Initializable {
 
 				int[] keys = Screeny.getKeyDetector().getPressedKeys();
 				config.regionScreenshotHotkey = keys;
-				config.save();
+				Screeny.saveAndReloadConfig();
+				regionHotkey.setText(keysToString(keys));
+			}
+		});
+
+		editNextHotkey.addEventFilter(KeyEvent.ANY, (event) -> {
+			event.consume();
+			if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+				if (event.getCode().isModifierKey()) return;
+
+				int[] keys = Screeny.getKeyDetector().getPressedKeys();
+				config.editNextHotkey = keys;
+				Screeny.saveAndReloadConfig();
+				regionHotkey.setText(keysToString(keys));
+			}
+		});
+
+		settingsHotkey.addEventFilter(KeyEvent.ANY, (event) -> {
+			event.consume();
+			if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+				if (event.getCode().isModifierKey()) return;
+
+				int[] keys = Screeny.getKeyDetector().getPressedKeys();
+				config.editNextHotkey = keys;
+				Screeny.saveAndReloadConfig();
 				regionHotkey.setText(keysToString(keys));
 			}
 		});

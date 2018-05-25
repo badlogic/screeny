@@ -27,9 +27,11 @@ public class Config {
 	public int[] screenshotHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_3};
 	public int[] appScreenshotHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_4};
 	public int[] regionScreenshotHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_5};
+	public int[] editNextHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_6};
+	public int[] settingsHotkey = new int[] {NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_7};
 
 	/** Storage configurations */
-	public List<StorageConfig> storageConfigs = Arrays.asList(new LocalStorageConfig(), new ScpStorageConfig());
+	public List<StorageConfig> storageConfigs = Arrays.asList(new LocalStorageConfig("Local storage"), new ScpStorageConfig("marioslab.io"));
 
 	Config () {
 	}
@@ -68,7 +70,6 @@ public class Config {
 	public <T> List<T> getEnabledStorageConfigs (Class<T> clazz) {
 		List<T> result = new ArrayList();
 		for (StorageConfig config : storageConfigs) {
-			if (!config.enabled) continue;
 			if (clazz.isInstance(config)) result.add((T)config);
 		}
 		return result;
@@ -78,7 +79,13 @@ public class Config {
 	 * upload. */
 	public static abstract class StorageConfig {
 		public String name;
-		public boolean enabled;
+
+		StorageConfig () {
+		}
+
+		StorageConfig (String name) {
+			this.name = name;
+		}
 	}
 
 	/** Local storage configuration, stores the local directory to store files to. */
@@ -86,7 +93,11 @@ public class Config {
 		public String localDirectory = System.getProperty("user.home") + "/Desktop";
 
 		LocalStorageConfig () {
-			enabled = true;
+			super();
+		}
+
+		LocalStorageConfig (String name) {
+			super(name);
 		}
 	}
 
@@ -102,5 +113,13 @@ public class Config {
 		public boolean useKeyFile = false;
 		public String keyFile = System.getProperty("user.home") + "/.ssh/id_rsa";
 		public String keyFilePassphrase;
+
+		ScpStorageConfig () {
+			super();
+		}
+
+		ScpStorageConfig (String name) {
+			super(name);
+		}
 	}
 }

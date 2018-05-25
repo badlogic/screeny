@@ -37,7 +37,8 @@ public class Screeny {
 		tray = new Tray();
 		storages.add(new LocalStorage());
 		storages.add(new ScpStorage());
-		loadConfig();
+		config = Config.load();
+		reloadConfig();
 		Application.launch(UI.class);
 	}
 
@@ -68,38 +69,18 @@ public class Screeny {
 		return new PlatformJavaFX();
 	}
 
-	private static void loadConfig () {
-		Thread configReloadThread = new Thread(new Runnable() {
-			@Override
-			public void run () {
-				long lastModificationTime = 0;
+	public static void saveAndReloadConfig () {
+		config.save();
+		reloadConfig();
+	}
 
-				while (true) {
-					if (!Config.CONFIG_FILE.exists() || Config.CONFIG_FILE.lastModified() != lastModificationTime) {
-						lastModificationTime = Config.CONFIG_FILE.lastModified();
-
-						synchronized (Screeny.class) {
-							Screeny.config = Config.load();
-						}
-
-						detector.clearHotkeyActions();
-						detector.addHotkeyAction(Screeny.config.screenshotHotkey, () -> Screenshot.takeScreenshot());
-						detector.addHotkeyAction(Screeny.config.appScreenshotHotkey, () -> Screenshot.takeAppScreenshot());
-						detector.addHotkeyAction(Screeny.config.regionScreenshotHotkey, () -> Screenshot.takeRegionScreenshot());
-
-						Log.info("Reloaded configuration.");
-					}
-
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		});
-		configReloadThread.setName("Config reload thread");
-		configReloadThread.setDaemon(true);
-		configReloadThread.start();
+	public static void reloadConfig () {
+		detector.clearHotkeyActions();
+		detector.addHotkeyAction(Screeny.config.screenshotHotkey, () -> Screenshot.takeScreenshot());
+		detector.addHotkeyAction(Screeny.config.appScreenshotHotkey, () -> Screenshot.takeAppScreenshot());
+		detector.addHotkeyAction(Screeny.config.regionScreenshotHotkey, () -> Screenshot.takeRegionScreenshot());
+		detector.addHotkeyAction(Screeny.config.editNextHotkey, () -> Screenshot.editNext());
+		detector.addHotkeyAction(Screeny.config.settingsHotkey, () -> UI.showMain());
 	}
 
 	public static void exit (int i) {

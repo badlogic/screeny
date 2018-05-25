@@ -8,18 +8,25 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
+import io.marioslab.screeny.ui.UI;
+
 public class Screenshot {
 	static Robot robot;
+	static boolean editNext = false;
 
 	private static void saveScreenshot (BufferedImage image) {
 		if (image == null) return;
 		String fileName = ".png";
-		if (Screeny.getConfig().addTimestampToFilename)
-			fileName = new SimpleDateFormat("yyyymmdd-HHmmss").format(new Date()) + fileName;
+		if (Screeny.getConfig().addTimestampToFilename) fileName = new SimpleDateFormat("yyyymmdd-HHmmss").format(new Date()) + fileName;
 		if (Screeny.getConfig().addUIDToFilename) {
 			String id = Base64.getEncoder().encodeToString(asByteArray(UUID.randomUUID()));
 			id = id.replace("==", "").replace("/", "a").replace("+", "b");
 			fileName = id + "-" + fileName;
+		}
+
+		if (editNext) {
+			UI.showEdit(image);
+			editNext = false;
 		}
 
 		System.out.println(fileName);
@@ -52,5 +59,9 @@ public class Screenshot {
 
 	public static void takeRegionScreenshot () {
 		saveScreenshot(Screeny.getPlatform().takeRegionScreenshot());
+	}
+
+	public static void editNext () {
+		editNext = true;
 	}
 }

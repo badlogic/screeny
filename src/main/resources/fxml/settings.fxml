@@ -4,38 +4,68 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="settings" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <padding>
-      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-   </padding>
-   <children>
-      <Label styleClass="heading" text="Hotkeys">
-         <VBox.margin>
-            <Insets bottom="32.0" />
-         </VBox.margin>
-      </Label>
-      <JFXTextField fx:id="desktopHotkey" labelFloat="true" prefHeight="32.0" promptText="Desktop screenshot">
-         <VBox.margin>
-            <Insets bottom="32.0" />
-         </VBox.margin>
-      </JFXTextField>
-      <JFXTextField fx:id="appHotkey" labelFloat="true" prefHeight="32.0" promptText="Application screenshot">
-         <VBox.margin>
-            <Insets bottom="32.0" />
-         </VBox.margin>
-      </JFXTextField>
-      <JFXTextField fx:id="regionHotkey" labelFloat="true" prefHeight="32.0" promptText="Region screenshot">
-         <VBox.margin>
-            <Insets bottom="32.0" />
-         </VBox.margin>
-      </JFXTextField>
-      <Label styleClass="heading" text="Storage">
-         <VBox.margin>
-            <Insets bottom="24.0" />
-         </VBox.margin>
-      </Label>
-      <JFXComboBox labelFloat="true" promptText="Save images to" />
-   </children>
-</VBox>
+<ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="515.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="settings" stylesheets="@style.css">
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
+         <children>
+            <Label styleClass="heading" text="Hotkeys">
+               <VBox.margin>
+                  <Insets bottom="32.0" />
+               </VBox.margin>
+            </Label>
+            <HBox>
+               <children>
+                  <JFXTextField fx:id="desktopHotkey" labelFloat="true" prefHeight="32.0" promptText="Desktop screenshot" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="32.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="appHotkey" labelFloat="true" prefHeight="32.0" promptText="Application screenshot" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="32.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox>
+               <children>
+                  <JFXTextField fx:id="regionHotkey" labelFloat="true" prefHeight="32.0" promptText="Region screenshot" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="32.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="editNextHotkey" labelFloat="true" prefHeight="32.0" promptText="Edit next screenshot" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="32.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox VBox.vgrow="NEVER">
+               <VBox.margin>
+                  <Insets bottom="32.0" />
+               </VBox.margin>
+               <children>
+                  <JFXTextField fx:id="settingsHotkey" labelFloat="true" prefHeight="32.0" promptText="Open settings" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets right="32.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <Label maxWidth="1.7976931348623157E308" prefHeight="32.0" text=" " HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Label styleClass="heading" text="Storage">
+               <VBox.margin>
+                  <Insets bottom="24.0" />
+               </VBox.margin>
+            </Label>
+            <JFXComboBox labelFloat="true" promptText="Save images to" />
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
